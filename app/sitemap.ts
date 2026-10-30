@@ -1,5 +1,61 @@
-export default {
-  hostname: "folio.press",
-  routes: ["/", "/about", "/privacy", "/terms", "/register", "/membership", "/login", "/reset-password", "/forgot-password", "/newsletter", "/newsletter/confirm", "/newsletter/preferences", "/newsletter/unsubscribe", "/latest", "/collections/[name]", "/tag/[slug]", "/author/[slug]", "/category/[slug]", "/article/[slug]", "/admin", "/admin/ads", "/admin/articles", "/admin/articles/[id]", "/admin/authors", "/admin/authors/[id]", "/admin/categories", "/admin/categories/[id]", "/admin/tags", "/admin/tags/[id]", "/admin/media", "/admin/comments", "/admin/subscribers", "/admin/subscribers/[id]", "/admin/users", "/admin/users/[id]", "/admin/calendar", "/admin/calendar/[id]", "/admin/comments/[id]", "/admin/newsletters", "/admin/newsletters/[id]", "/admin/settings", "/account", "/account/history", "/account/saved", "/account/subscriptions", "/preview/[token]", "/rss.xml", "/search"
- ]
-};
+import type { MetadataRoute } from "next";
+import { listArticles, listAuthors, listCategories, listTags } from "@/lib/queries";
+import { SITE } from "@/lib/utils";
+
+export const dynamic = "force-dynamic";
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const [articles, categories, tags, authors] = await Promise.all([
+    listArticles({ limit: 500 }),
+    listCategories(),
+    listTags(200),
+    listAuthors(),
+  ]);
+
+  const staticPaths = [
+    "",
+    "/latest",
+    "/about",
+    "/contact",
+    "/membership",
+    "/newsletter",
+    "/newsletter/archive",
+    "/authors",
+    "/privacy",
+    "/terms",
+    "/search",
+  ];
+
+  return [
+    ...staticPaths.map((p) => ({
+      url: `${SITE.url}${p}`,
+      lastModified: new Date(),
+      changeFrequency: "daily" as const,
+      priority: p === "" ? 1 : 0.7,
+    })),
+    ...categories.map((c) => ({
+      url: `${SITE.url}/category/${c.slug}`,
+      lastModified: new Date(),
+      changeFrequency: "daily" as const,
+      priority: 0.8,
+    })),
+    ...articles.map((a) => ({
+      url: `${SITE.url}/article/${a.slug}`,
+      lastModified: new Date((a.updated_at ?? a.created_at).replace(" ", "T") + "Z"),
+      changeFrequency: "weekly" as const,
+      priority: 0.9,
+    })),
+    ...tags.map((t) => ({
+      url: `${SITE.url}/tag/${t.slug}`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.5,
+    })),
+    ...authors.map((a) => ({
+      url: `${SITE.url}/author/${a.slug}`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.5,
+    })),
+  ];
+}
