@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: "About FOLIO",
   description: "FOLIO is an independent digital magazine of ideas, culture and the modern world, funded by readers.",
 };
+
 export default async function AboutPage() {
   const [authors, categories, settings] = await Promise.all([listAuthors(), listCategories(), getSettings()]);
 
