@@ -1,10 +1,9 @@
-// Action types
-export type ArticleAction = {
-  type: "article:fetch" | "article:fetch:success" | "article:fetch:error";
-  payload?: any;
+export type ActionState = {
+  ok: boolean;
+  message: string;
+  errors?: Record<string, string>;
+  /** Optional link surfaced when email delivery is not configured. */
+  link?: { href: string; label: string };
 };
 
-export type UserAction = {
-  type: "user:login" | "user:login:success" | "user:login:error";
-  payload?: any;
-};
+export const IDLE: ActionState = { ok: false, message: "" };

@@ -6,3 +6,7 @@ node_modules
 .dev.vars
 *.log
 .DS_Store
+/freebuff-sites-build/
+/.open-next/
+/.wrangler/
+*.tsbuildinfo
