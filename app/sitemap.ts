@@ -1,0 +1,5 @@
+export default {
+  hostname: "folio.press",
+  routes: ["/", "/about", "/privacy", "/terms", "/register", "/membership", "/login", "/reset-password", "/forgot-password", "/newsletter", "/newsletter/confirm", "/newsletter/preferences", "/newsletter/unsubscribe", "/latest", "/collections/[name]", "/tag/[slug]", "/author/[slug]", "/category/[slug]", "/article/[slug]", "/admin", "/admin/ads", "/admin/articles", "/admin/articles/[id]", "/admin/authors", "/admin/authors/[id]", "/admin/categories", "/admin/categories/[id]", "/admin/tags", "/admin/tags/[id]", "/admin/media", "/admin/comments", "/admin/subscribers", "/admin/subscribers/[id]", "/admin/users", "/admin/users/[id]", "/admin/calendar", "/admin/calendar/[id]", "/admin/comments/[id]", "/admin/newsletters", "/admin/newsletters/[id]", "/admin/settings", "/account", "/account/history", "/account/saved", "/account/subscriptions", "/preview/[token]", "/rss.xml", "/search"
+ ]
+};
