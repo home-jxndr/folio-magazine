@@ -5,6 +5,7 @@ import { isEmailConfigured } from "@/lib/email";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Membership" };
+
 export default async function MembershipPage() {
   const emailReady = isEmailConfigured();
 

@@ -12,11 +12,30 @@ export async function GET() {
   const items = articles
     .map((a) => {
       const url = `${SITE.url}/article/${a.slug}`;
-      return `    <item>\n      <title>${escapeXml(a.title)}</title>\n      <link>${url}</link>\n      <guid isPermaLink="true">${url}</guid>\n      <description>${escapeXml(a.dek ?? a.excerpt ?? "")}</description>\n      <author>${escapeXml(a.author_name ?? "FOLIO")}</author>\n      <category>${escapeXml(a.category_name ?? "")}</category>\n      <pubDate>${new Date((a.published_at ?? a.created_at).replace(" ", "T") + "Z").toUTCString()}</pubDate>\n    </item>`;
+      return `    <item>
+      <title>${escapeXml(a.title)}</title>
+      <link>${url}</link>
+      <guid isPermaLink="true">${url}</guid>
+      <description>${escapeXml(a.dek ?? a.excerpt ?? "")}</description>
+      <author>${escapeXml(a.author_name ?? "FOLIO")}</author>
+      <category>${escapeXml(a.category_name ?? "")}</category>
+      <pubDate>${new Date((a.published_at ?? a.created_at).replace(" ", "T") + "Z").toUTCString()}</pubDate>
+    </item>`;
     })
     .join("\n");
 
-  const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">\n  <channel>\n    <title>${SITE.name} — ${SITE.tagline}</title>\n    <link>${SITE.url}</link>\n    <description>${escapeXml(SITE.description)}</description>\n    <language>en</language>\n    <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>\n    <atom:link href="${SITE.url}/rss.xml" rel="self" type="application/rss+xml" />\n${items}\n  </channel>\n</rss>`;
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>${SITE.name} — ${SITE.tagline}</title>
+    <link>${SITE.url}</link>
+    <description>${escapeXml(SITE.description)}</description>
+    <language>en</language>
+    <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
+    <atom:link href="${SITE.url}/rss.xml" rel="self" type="application/rss+xml" />
+${items}
+  </channel>
+</rss>`;
 
   return new Response(xml, {
     headers: {

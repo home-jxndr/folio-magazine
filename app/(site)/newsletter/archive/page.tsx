@@ -6,6 +6,7 @@ import { formatDate } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Newsletter archive" };
+
 export default async function NewsletterArchivePage() {
   const editions = await getNewsletterEditions(60);
   const sent = editions.filter((e) => e.status === "sent" || e.status === "ready");

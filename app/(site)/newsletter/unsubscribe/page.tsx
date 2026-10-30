@@ -5,6 +5,7 @@ import { UnsubscribeForm } from "@/components/unsubscribe-form";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Unsubscribe" };
+
 export default async function UnsubscribePage({ searchParams }: { searchParams: Promise<{ token?: string }> }) {
   const { token } = await searchParams;
   const sub = token ? await getSubscriberByToken(token) : null;
