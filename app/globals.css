@@ -117,7 +117,7 @@ a {
     color: var(--ink);
   }
   .btn-ghost:hover {
-    border-color: var(--ink);
+    border-color: var(--rule);
     background: var(--paper-2);
   }
   .field {
