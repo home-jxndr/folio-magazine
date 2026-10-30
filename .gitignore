@@ -10,3 +10,4 @@ node_modules
 /.open-next/
 /.wrangler/
 *.tsbuildinfo
+/.data/

@@ -25,9 +25,17 @@ The database schema and demo content are created automatically on the first requ
 
 ```bash
 npm run build                          # Next production build + typecheck
-npx opennextjs-cloudflare build        # Worker bundle in .open-next/
-npx wrangler dev --port 8787           # run the worker locally (D1 emulated)
 ```
+
+### Local database
+
+Content is stored in a SQLite file at `.data/folio.db`, created and seeded on the first request. Nothing else is
+required to run the magazine locally — no Cloudflare account, no database server, no migration step. Set
+`FOLIO_DB_PATH` to use a different file location, and delete `.data/` to start from a clean seed.
+
+The data layer uses Node's built-in `node:sqlite`, so **Node 22.5 or newer** is required. The file is gitignored;
+`lib/db.ts` exposes the same `prepare`/`bind`/`first`/`all`/`run`/`batch` surface that a Cloudflare D1 binding did,
+so `lib/queries.ts`, `lib/schema.ts` and `lib/seed.ts` are unchanged.
 
 ### Demo accounts
 
@@ -52,12 +60,8 @@ Remove these accounts (Admin → Users & roles) before running a public deployme
 | `MAIL_FROM` | No | From address for outgoing mail (default `FOLIO <desk@folio.press>`). |
 | `NEXT_PUBLIC_SITE_URL` | No | Canonical origin used in RSS, sitemap and metadata (defaults to the request-independent `SITE.url`). |
 
-Bindings (Cloudflare):
-
-| Binding | Type | Notes |
-| --- | --- | --- |
-| `DB` | D1 database | Required. Content, accounts, subscribers, analytics. |
-| `ASSETS` | Static assets | Provided by the Workers/OpenNext runtime. |
+Database: no binding or external service is needed. `lib/db.ts` uses Node's built-in `node:sqlite` and keeps everything
+in `.data/folio.db` (override with `FOLIO_DB_PATH`).
 
 **Email behaviour is honest about configuration.** Without `RESEND_API_KEY`:
 
@@ -104,8 +108,8 @@ publish (their "Publish" becomes "review"); administrators manage accounts; only
 
 - `lib/schema.ts` + `lib/seed.ts` bootstrap lazily on first DB access, so no manual migration step is needed. Every
   seed insert is `INSERT OR IGNORE`, so an interrupted seed resumes instead of failing on unique constraints.
-- Public pages are `force-dynamic`; all data comes from D1 through `lib/queries.ts` — no hardcoded article content in
-  the UI.
+- Public pages are `force-dynamic`; all data comes from the SQLite database via `lib/db.ts` through `lib/queries.ts` —
+  no hardcoded article content in the UI.
 - Sessions are opaque random tokens in the `folio_session` cookie, stored in a `sessions` table with expiry.
 - `worker.js` at the project root is the Wrangler entry. It stubs `process.chdir`, which OpenNext's Node adapter calls
   with `__dirname` (empty under workerd) and which otherwise fails every request with `no such file or directory`.
