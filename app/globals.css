@@ -59,11 +59,11 @@ a {
 
 @layer components {
   .kicker {
-    @apply inline-flex items-center gap-2 font-sans text-[10px] font-semibold uppercase tracking-kicker;
+    display: inline-flex;
+    align-items: center;
     color: var(--accent);
   }
   .kicker-muted {
-    @apply font-sans text-[10px] font-semibold uppercase tracking-kicker;
     color: var(--ink-soft);
   }
   .headline-xl {
@@ -103,7 +103,9 @@ a {
     background-size: 100% 1px;
   }
   .btn {
-    @apply inline-flex items-center justify-center gap-2 px-5 py-3 font-sans text-[11px] font-semibold uppercase tracking-kicker transition-colors duration-200;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
   }
   .btn-primary {
     background: var(--ink);
@@ -117,19 +119,25 @@ a {
     color: var(--ink);
   }
   .btn-ghost:hover {
-    border-color: var(--rule);
+    border-color: var(--ink);
     background: var(--paper-2);
   }
   .field {
-    @apply w-full border bg-transparent px-3 py-2.5 font-sans text-sm outline-none transition-colors;
+    width: 100%;
     border-color: var(--rule);
+    padding: 10px 15px;
+    font-family: Inter, system-ui, sans-serif;
+    font-size: 0.875rem;
     color: var(--ink);
+    background: transparent;
+    outline: none;
+    transition: border-color 0.2s;
   }
   .field:focus {
     border-color: var(--ink);
   }
   .label {
-    @apply mb-1.5 block font-sans text-[10px] font-semibold uppercase tracking-kicker;
+    display: block;
     color: var(--ink-soft);
   }
   .card-lift {
